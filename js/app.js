@@ -1,5 +1,5 @@
 var NOM = document.querySelector("#name");
-var DATE = new Date(document.querySelector("#date").value);
+var DATE = document.querySelector("#date");
 var F = document.querySelector("#finput");
 var T = document.querySelector("#output")
 var CLR = document.querySelector("#snap");
@@ -9,11 +9,13 @@ var AGE;
 async function fAnalyzeMe(event){
     COUNT += 1;
     event.preventDefault();
-    
+
+    let d = new Date(DATE.value);
+
     let urlnat = `https://api.nationalize.io/?name=${NOM.value}`;
     await fetch(urlnat).then(data => {return data.json()}).then( (result) => {addVictim(result);});
 
-    let urldat = `http://numbersapi.com/${DATE.getMonth()+1}/${DATE.getDate()}/date`;
+    let urldat = `http://numbersapi.com/${d.getMonth()+1}/${d.getDate()}/date`;
     await fetch(urldat).then(data => {return data.text();}).then( (result) => {addHistory(result)});
 
     let urlage = `https://api.agify.io/?name=${NOM.value}`;
@@ -25,6 +27,7 @@ async function fAnalyzeMe(event){
       
 }
 async function addVictim(result){
+    let d = new Date(DATE.value);
     T.innerHTML +=
         `
             <tr>
@@ -37,7 +40,7 @@ async function addVictim(result){
                     ${result.country[0].probability}
                 </td>
                 <td rowspan="${result.country.length}">
-                    ${DATE.getDate()}/${DATE.getMonth()+1}/${DATE.getFullYear()}
+                    ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}
                 </td>
                 <td class ="ccj" id= "ccj${COUNT}" rowspan="${result.country.length}">
                 </td>
